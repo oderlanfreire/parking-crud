@@ -10,5 +10,7 @@ import com.api.crudestacionamento.models.ModeloEstacionamento;
 
 @Repository
 public interface RepositorioEstacionamento extends JpaRepository<ModeloEstacionamento, UUID> {
-    
+    boolean existsByLicensePlatCar(String licensePlatCar);
+    boolean existsByParkingSpotNumber(String parkingSpotNumber);
+    boolean existsByApartmentAndBlock(String apartment, String block);
 }
