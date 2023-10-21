@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -79,5 +80,25 @@ public class ControllerEstacionamento {
         }
         servicoEstacionamento.delete(modeloEstacionamentoOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Vaga de estacionamento deletada com sucesso!");
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateParkingSpot(@PathVariable(value = "id") UUID id,
+     @RequestBody @Valid EstacionamentoDto estacionamentoDto){
+        Optional<ModeloEstacionamento> modeloEstacionamentoOptional = servicoEstacionamento.findById(id);
+        if(!modeloEstacionamentoOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vaga de estacionamento não encontrada!");
+        }
+        var modeloEstacionamento = modeloEstacionamentoOptional.get();
+        modeloEstacionamento.setParkingSpotNumber(estacionamentoDto.getParkingSpotNumber());
+        modeloEstacionamento.setLicensePlatCar(estacionamentoDto.getLicensePlatCar());
+        modeloEstacionamento.setBrandCar(estacionamentoDto.getBrandCar());
+        modeloEstacionamento.setModelCar(estacionamentoDto.getModelCar());
+        modeloEstacionamento.setColorCar(estacionamentoDto.getColorCar());
+        modeloEstacionamento.setResponsibleName(estacionamentoDto.getResponsibleName());
+        modeloEstacionamento.setApartment(estacionamentoDto.getApartment());
+        modeloEstacionamento.setBlock(estacionamentoDto.getBlock());
+
+        return ResponseEntity.status(HttpStatus.OK).body(servicoEstacionamento.save(modeloEstacionamento));
     }
 }
